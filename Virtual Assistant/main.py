@@ -73,7 +73,7 @@ def process_command(c):
 
 
 if __name__ == "__main__":
-    speak("Hey there! Initializing Jarvis")
+    speak("Hey there! Initializing Charlie")
 
     while True:
 
@@ -84,13 +84,13 @@ if __name__ == "__main__":
             with sr.Microphone() as source:
                print("Listening...")
                recognizer.adjust_for_ambient_noise(source, duration=1)
-               print("Listening for 'Bandu'...")
+               print("Listening for 'Charlie'...")
                audio = recognizer.listen(source, timeout=5, phrase_time_limit=5)
                word = recognizer.recognize_google(audio).lower()
 
-               if word == "bandu":
+               if word == "charlie":
                   speak("Yes?, How can i help you?")
-                  print("Jarvis active, listening for your command...")
+                  print("Charlie active, listening for your command...")
                   audio = recognizer.listen(source, timeout=5, phrase_time_limit=5)
                   command = recognizer.recognize_google(audio)
                   print(f"Command: {command}")
