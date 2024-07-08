@@ -10,6 +10,7 @@ from openai import OpenAI
 recognizer = sr.Recognizer()
 engine = pyttsx3.init() 
 newsapi="3d46cded11074fe5bf89ecffa7ebe72c"
+weatherapi = "9b83c7706e9937b2d6eaa5c5fabcf755"
 
 voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[0].id)
@@ -64,6 +65,17 @@ def process_command(c):
             # Print the headlines
             for article in articles:
                 speak(article['title'])
+     elif "weather" in command.lower():
+        city = "Mumbai"  # Replace with desired city or make it dynamic
+        w = requests.get(f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={weatherapi}&units=metric")
+        if w.status_code == 200:
+            data = w.json()
+            main = data['main']
+            weather = data['weather'][0]
+            temperature = main['temp']
+            weather_description = weather['description']
+            weather_info = f"The current temperature in {city} is {temperature}°C with {weather_description}."
+            speak(weather_info)
     # else:
     #     output=airpocess(c)
     #     speak(output)
