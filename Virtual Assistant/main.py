@@ -88,31 +88,39 @@ if __name__ == "__main__":
     speak("Hey there! Initializing Charlie")
 
     while True:
-
-        recognizer = sr.Recognizer()
         print("Recognizing...")
+
         try:
-
             with sr.Microphone() as source:
-               print("Listening...")
-               recognizer.adjust_for_ambient_noise(source, duration=1)
-               print("Listening for 'Charlie'...")
-               audio = recognizer.listen(source, timeout=5, phrase_time_limit=5)
-               word = recognizer.recognize_google(audio).lower()
+                print("Listening...")
+                recognizer.adjust_for_ambient_noise(source, duration=1)
+                print("Listening for 'Charlie'...")
 
-               if word == "charlie":
-                  speak("Yes?, How can i help you?")
-                  print("Charlie active, listening for your command...")
-                  audio = recognizer.listen(source, timeout=5, phrase_time_limit=5)
-                  command = recognizer.recognize_google(audio)
-                  print(f"Command: {command}")
-            
+                while True:
+                    audio = recognizer.listen(source, timeout=5, phrase_time_limit=5)
+                    word = recognizer.recognize_google(audio).lower()
 
-            process_command(command)
+                    if word == "charlie":
+                        speak("Yes?, How can I help you?")
+                        print("Charlie active, listening for your command...")
 
+                        while True:
+                            try:
+                                audio = recognizer.listen(source, timeout=5, phrase_time_limit=5)
+                                command = recognizer.recognize_google(audio).lower()
+                                print(f"Command: {command}")
+                                process_command(command)
+                            except sr.UnknownValueError:
+                                print("Sorry, I did not understand that. Please repeat.")
+                            except sr.RequestError:
+                                print("Network error. Please check your internet connection.")
 
+        except sr.UnknownValueError:
+            print("Sorry, I did not understand that. Please repeat.")
+        except sr.RequestError:
+            print("Network error. Please check your internet connection.")
         except Exception as e:
-            print("Sorry, I did not understand that")
+            print(f"An error occurred: {e}")
         
             
   
